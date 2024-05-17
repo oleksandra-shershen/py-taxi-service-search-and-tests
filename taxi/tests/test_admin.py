@@ -29,7 +29,10 @@ class AdminTests(TestCase):
         )
         self.car = Car.objects.create(
             model="Toyota Corolla",
-            manufacturer=Manufacturer.objects.create(name="Toyota", country="Japan"),
+            manufacturer=Manufacturer.objects.create(
+                name="Toyota",
+                country="Japan"
+            ),
         )
 
     def test_driver_admin_list_display(self):
@@ -51,7 +54,11 @@ class AdminTests(TestCase):
         self.assertTrue("manufacturer" in ma.list_filter)
 
     def test_manufacturer_registered(self):
-        self.client.login(username="admin", email="admin@admin.com", password="admin")
+        self.client.login(
+            username="admin",
+            email="admin@admin.com",
+            password="admin"
+        )
         response = self.client.get("/admin/taxi/manufacturer/")
         self.assertEqual(response.status_code, 200)
 
