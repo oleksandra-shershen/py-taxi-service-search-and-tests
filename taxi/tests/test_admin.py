@@ -39,7 +39,6 @@ class AdminTests(TestCase):
     def test_driver_admin_fieldsets(self):
         ma = DriverAdmin(Driver, self.site)
         form = ma.get_form(self.request, self.driver)
-        # Create a form instance to check fields included in the form
         form_instance = form(instance=self.driver)
         self.assertIn("license_number", form_instance.fields)
 
@@ -57,7 +56,6 @@ class AdminTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_admin_login_and_access_driver_page(self):
-        # Test that admin can log in and access the driver admin page
         self.client.login(username="admin", password="admin")
         url = f"/admin/taxi/driver/{self.driver.id}/change/"
         response = self.client.get(url)
