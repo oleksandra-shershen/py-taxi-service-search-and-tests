@@ -3,10 +3,12 @@ from django.urls import reverse
 from django.contrib.auth import get_user_model
 from taxi.models import Manufacturer
 
+manufacturer_url = reverse("taxi:manufacturer-list")
+
 
 class PublicManufacturerTest(TestCase):
     def setUp(self):
-        self.url = reverse("taxi:manufacturer-list")
+        self.url = manufacturer_url
 
     def test_login_required(self):
         response = self.client.get(self.url)
@@ -20,7 +22,7 @@ class PrivateManufacturerListViewTest(TestCase):
             username="testuser", password="test123"
         )
         self.client.force_login(self.user)
-        self.url = reverse("taxi:manufacturer-list")
+        self.url = manufacturer_url
 
         Manufacturer.objects.create(name="Toyota", country="Japan")
         Manufacturer.objects.create(name="Ford", country="USA")
