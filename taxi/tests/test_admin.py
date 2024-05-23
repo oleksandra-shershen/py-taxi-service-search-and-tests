@@ -1,6 +1,8 @@
 from django.contrib.admin.sites import AdminSite
 from django.test import TestCase, RequestFactory
 from django.contrib.auth import get_user_model
+from django.urls import reverse
+
 from taxi.admin import DriverAdmin, CarAdmin
 from taxi.models import Driver, Car, Manufacturer
 
@@ -36,22 +38,22 @@ class AdminTests(TestCase):
         )
 
     def test_driver_admin_list_display(self):
-        ma = DriverAdmin(Driver, self.site)
-        self.assertTrue("license_number" in ma.list_display)
+        driver_admin = DriverAdmin(Driver, self.site)
+        self.assertTrue("license_number" in driver_admin.list_display)
 
     def test_driver_admin_fieldsets(self):
-        ma = DriverAdmin(Driver, self.site)
-        form = ma.get_form(self.request, self.driver)
+        driver_admin = DriverAdmin(Driver, self.site)
+        form = driver_admin.get_form(self.request, self.driver)
         form_instance = form(instance=self.driver)
         self.assertIn("license_number", form_instance.fields)
 
     def test_car_admin_search_fields(self):
-        ma = CarAdmin(Car, self.site)
-        self.assertTrue("model" in ma.search_fields)
+        car_admin = CarAdmin(Car, self.site)
+        self.assertTrue("model" in car_admin.search_fields)
 
     def test_car_admin_list_filter(self):
-        ma = CarAdmin(Car, self.site)
-        self.assertTrue("manufacturer" in ma.list_filter)
+        car_admin = CarAdmin(Car, self.site)
+        self.assertTrue("manufacturer" in car_admin.list_filter)
 
     def test_manufacturer_registered(self):
         self.client.login(
@@ -64,6 +66,6 @@ class AdminTests(TestCase):
 
     def test_admin_login_and_access_driver_page(self):
         self.client.login(username="admin", password="admin")
-        url = f"/admin/taxi/driver/{self.driver.id}/change/"
+        url = reverse("admin:taxi_driver_change", args=[self.driver.id])
         response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
