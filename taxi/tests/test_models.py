@@ -1,5 +1,7 @@
 from django.test import TestCase
-from taxi.models import Manufacturer, Driver, Car
+from django.urls import reverse
+
+from taxi.models import Manufacturer, Car
 from django.contrib.auth import get_user_model
 
 
@@ -37,7 +39,7 @@ class DriverModelTest(TestCase):
     def test_get_absolute_url(self):
         self.assertEqual(
             self.user.get_absolute_url(),
-            f"/drivers/{self.user.pk}/"
+            reverse("taxi:driver-detail", args=[self.user.pk])
         )
 
 
